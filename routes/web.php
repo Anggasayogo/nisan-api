@@ -36,5 +36,19 @@ $router->group(['prefix' => 'api/v1/','middleware' => 'auth','middleware' => 'co
     $router->post('add/kopdar','KopdarController@store');
     $router->post('update/kopdar/{id}','KopdarController@update');
     $router->get('delete/kopdar/{id}','KopdarController@destroy');
+
+    // pengumuman
+    $router->get('/pengumuman','PengumumanController@index');
+    $router->get('/pengumuman/{id}','PengumumanController@index');
+    $router->post('add/pengumuman','PengumumanController@store');
+    $router->post('update/pengumuman/{id}','PengumumanController@update');
+    $router->get('delete/pengumuman/{id}','PengumumanController@destroy');
+
+    // donasi
+    $router->get('/donasi','DonasiController@index');
+    $router->get('/donasi/{id}','DonasiController@index');
+    $router->post('add/donasi','DonasiController@store');
+    $router->post('update/donasi/{id}','DonasiController@update');
+    $router->gte('delete/donasi/{id}','DonasiController@delete');
 });
 
