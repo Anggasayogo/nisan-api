@@ -14,3 +14,27 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->get('/key',function(){
+    return \Illuminate\Support\Str::random(32);
+});
+
+$router->post('/login','AuthController@login');
+$router->post('/register','AuthController@register');
+
+$router->group(['prefix' => 'api/v1/','middleware' => 'auth','middleware' => 'cors'], function () use ($router) {
+    $router->get('/user/{id}','UserController@index');
+    // members
+    $router->get('/member','MemberController@index');
+    $router->get('/member/{id}','MemberController@index');
+    $router->post('add/member','MemberController@store');
+    $router->post('update/member/{id}','MemberController@update');
+    $router->get('delete/member/{id}','MemberController@destroy');
+
+    // kopdar
+    $router->get('/kopdar','KopdarController@index');
+    $router->get('/kopdar/{id}','KopdarController@index');
+    $router->post('add/kopdar','KopdarController@store');
+    $router->post('update/kopdar/{id}','KopdarController@update');
+    $router->get('delete/kopdar/{id}','KopdarController@destroy');
+});
+
