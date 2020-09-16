@@ -21,12 +21,14 @@ $router->get('/key',function(){
 $router->post('/login','AuthController@login');
 $router->post('/register','AuthController@register');
 
-$router->group(['prefix' => 'api/v1/','middleware' => 'auth','middleware' => 'cors'], function () use ($router) {
+$router->post('add/member','MemberController@store');
+$router->post('login/member','MemberController@login');
+
+$router->group(['prefix' => 'api/v1/','middleware' => 'auth'], function () use ($router) {
     $router->get('/user/{id}','UserController@index');
     // members
     $router->get('/member','MemberController@index');
     $router->get('/member/{id}','MemberController@index');
-    $router->post('add/member','MemberController@store');
     $router->post('update/member/{id}','MemberController@update');
     $router->get('delete/member/{id}','MemberController@destroy');
 
@@ -49,7 +51,7 @@ $router->group(['prefix' => 'api/v1/','middleware' => 'auth','middleware' => 'co
     $router->get('/donasi/{id}','DonasiController@index');
     $router->post('add/donasi','DonasiController@store');
     $router->post('update/donasi/{id}','DonasiController@update');
-    $router->gte('delete/donasi/{id}','DonasiController@delete');
+    $router->get('delete/donasi/{id}','DonasiController@delete');
 
     // Berita Acara 
     $router->get('/beritaacara','BeritaAcaraController@index');

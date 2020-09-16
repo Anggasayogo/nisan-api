@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class MemberController extends Controller
 {
@@ -43,6 +44,7 @@ class MemberController extends Controller
     }
 
 
+
     public function store(Request $request)
     {
         $id = DB::table('member')->max('id_member');
@@ -53,6 +55,7 @@ class MemberController extends Controller
             'full_name' => $request->full_name,
             'pseudonym' => $request->alias_name,
             'email' => $request->email,
+            'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'alamat' => $request->alamat,
             'varian' => $request->varian,
@@ -121,4 +124,38 @@ class MemberController extends Controller
         }
     }
     
+    public function login(Request $request)
+    {
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        $cek = DB::table('member')->where('email','=',$email)->first();
+        if($cek->email == $email){
+            if(Hash::check($password,$cek->password)){
+                $apitoken = base64_encode(\Illuminate\Support\Str::random(32));
+                DB::table('member')->where('email','=',$email)->update(['api_token' => $apitoken]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'login berhasil',
+                    'api_token' => [
+                        'user' => $cek,
+                        'api_token' => $apitoken
+                    ]
+                ],201);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' => 'error ocurreted',
+                    'data' => null,
+                ],500);
+            }
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'error ocurreted',
+                'data' => null,
+            ],500);
+        }
+    }
+
 }
